@@ -3,6 +3,7 @@ import urllib.request
 from bs4 import BeautifulSoup as bs
 import lxml
 import requests
+import re
 
 
 headers = {
@@ -16,17 +17,19 @@ url = "https://oldschool.runescape.wiki/w/Chest_(Barrows)"
 
 r = requests.get(url, headers=headers)# allow_redirects=True
    
-values = []
+
 soup = bs(r.content, "lxml")
 
-heading_tags = ["h1", "h2", "h3"]
-for tags in soup.find_all("tbody"):
 
-    if(tags.text[2:6] == "Item"):
-        print(tags, "\n\n")
-   
-print("\n\n\n\n\n\n\n")
 
 for i in soup.find_all('tr', style="text-align:center"):
-    print(i, "\n")
-print(len(soup.find_all('tr', style="text-align:center")))
+   
+    name = i.find("td", class_="item-col").text
+    chance = i.find("td", class_=re.compile(r"^table-(?!n).*")).text
+    print(name, chance, "\n")
+
+    
+   
+
+
+    
